@@ -1,6 +1,13 @@
 package channelpopularity.context;
 
-public ChannelContext implements ContextI {
+import channelpopularity.context.ContextI;
+import channelpopularity.state.UnPopular;
+import channelpopularity.state.MidPopular;
+import channelpopularity.state.HighlyPopular;
+import channelpopularity.state.UltraPopular;
+import channelpopularity.state.StateI;
+
+public class ChannelContext implements ContextI {
 
     /*              ## Code given ##
     private StateI curState;
@@ -18,16 +25,16 @@ public ChannelContext implements ContextI {
         }
     } */
 
-    StateI unPopular;
-    StateI midPopular;
-    StateI highlyPopular;
-    StateI ultraPopular;
-    StateI currentState;
+    private StateI unPopular;
+    private StateI midPopular;
+    private StateI highlyPopular;
+    private StateI ultraPopular;
+    private StateI currentState;
 
     public ChannelContext(){
         unPopular     = new UnPopular(this);
         midPopular    = new MidPopular(this);
-        highlyPopular = new HighPopular(this);
+        highlyPopular = new HighlyPopular(this);
         ultraPopular  = new UltraPopular(this);
 
         currentState = unPopular;
@@ -41,32 +48,45 @@ public ChannelContext implements ContextI {
 
     @Override
     public void addVideo(String video){
-        currentState.addVideo(String video);
+        currentState.addVideo(video);
     }
 
     @Override
     public void removeVideo(String video){
-        currentState.removeVideo(String video);
+        currentState.removeVideo(video);
     }
 
     @Override
     public void addMetrics(String video, int views, int likes, int dislikes){
-        currentState.addMetrics(String video, int views, int likes, int dislikes);
+        currentState.addMetrics(video, views, likes, dislikes);
     }
 
     @Override
-    public void adRequest(int len){
-        currentState.adRequest(int len);
+    public void adRequest(String video, int len){
+        currentState.adRequest(video, len);
     }
 
     @Override
-    public StateI getUnpopularState()    {  return unPopular;}
+    public StateI getUnPopularState()    {  return unPopular;}
     @Override
     public StateI getMidPopularState()   {  return midPopular;}
     @Override
     public StateI getHighlyPopularState(){  return highlyPopular;}
     @Override
     public StateI getUltraPopularState() {  return ultraPopular;}
+
+
+    @Override
+    public void parseInput(String inpt){
+        System.out.println(inpt);
+        if (inpt.contains("ADD_VIDEO")){
+            addVideo(inpt.replace("ADD_VIDEO::", ""));
+        }
+
+        if (inpt.contains("REMOVE_VIDEO")){
+            removeVideo(inpt.replace("REMOVE_VIDEO::", ""));
+        }
+    }
 
 
 

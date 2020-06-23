@@ -1,5 +1,6 @@
 package channelpopularity.state;
 
+import channelpopularity.context.ContextI;
 public class MidPopular implements StateI {
 
     ContextI currentChannel;
@@ -10,9 +11,10 @@ public class MidPopular implements StateI {
 
     @Override
     public void addVideo(String video){
+        System.out.println(video + "--------> MidPopular");
         // TODO add video to the list of videos
         // set state using:
-        // currentChannel.setState(currentChannel.getMidPopularState());
+        currentChannel.setState(currentChannel.getHighlyPopularState());
     }
 
     @Override
@@ -30,7 +32,7 @@ public class MidPopular implements StateI {
     }
 
     @Override
-    public void adRequest(int len){
+    public void adRequest(String video, int len){
         // TODO if len satisfies the criteria, accept, else reject
         // set state using:
         // currentChannel.setState(currentChannel.getMidPopularState());

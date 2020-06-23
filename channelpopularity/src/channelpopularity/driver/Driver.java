@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import channelpopularity.util.FileProcessor;
+import channelpopularity.context.ContextI;
+import channelpopularity.context.ChannelContext;
 
 /**
  * @author John Doe
@@ -25,15 +27,12 @@ public class Driver {
 
         try {
         	FileProcessor fileProcessor	= new FileProcessor(inputFile);
-        	// WordProcessor wordProcessor = new WordProcessor(outputFile, metricFile);
+        	ContextI channel = new ChannelContext();
 
         	String line = fileProcessor.poll();
-        	int index = 1;
+
           	while(line != null){
-          		System.out.println("index: " + index + "\nline: " + line + "\n\n");
-          		if(!line.isEmpty()){
-	        		index++;
-	        	}
+                channel.parseInput(line);
         		line = fileProcessor.poll();
         	}
         }

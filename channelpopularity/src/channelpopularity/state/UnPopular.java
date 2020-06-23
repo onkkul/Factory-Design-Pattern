@@ -1,22 +1,26 @@
-package channelpopularity.state
+package channelpopularity.state;
 
-public class UltraPopular implements StateI {
+import channelpopularity.context.ContextI;
+
+public class UnPopular implements StateI {
 
     ContextI currentChannel;
 
-    public UltraPopular(ContextI channel){
+    public UnPopular(ContextI channel){
         currentChannel = channel;
     }
 
     @Override
     public void addVideo(String video){
+        System.out.println(video + "--------> add");
         // TODO add video to the list of videos
         // set state using:
-        // currentChannel.setState(currentChannel.getMidPopularState());
+        currentChannel.setState(currentChannel.getMidPopularState());
     }
 
     @Override
     public void removeVideo(String video){
+        System.out.println(video + "--------> remove");
         // TODO remove videos from the list
         // set state using:
         // currentChannel.setState(currentChannel.getMidPopularState());
@@ -30,7 +34,7 @@ public class UltraPopular implements StateI {
     }
 
     @Override
-    public void adRequest(int len){
+    public void adRequest(String video, int len){
         // TODO if len satisfies the criteria, accept, else reject
         // set state using:
         // currentChannel.setState(currentChannel.getMidPopularState());

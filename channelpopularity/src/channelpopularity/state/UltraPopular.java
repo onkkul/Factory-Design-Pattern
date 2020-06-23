@@ -1,18 +1,21 @@
 package channelpopularity.state;
 
-public class HighlyPopular implements StateI {
+import channelpopularity.context.ContextI;
+
+public class UltraPopular implements StateI {
 
     ContextI currentChannel;
 
-    public HighlyPopular(ContextI channel){
+    public UltraPopular(ContextI channel){
         currentChannel = channel;
     }
 
     @Override
     public void addVideo(String video){
+        System.out.println(video + "--------> UltraPopular");
         // TODO add video to the list of videos
         // set state using:
-        // currentChannel.setState(currentChannel.getMidPopularState());
+        currentChannel.setState(currentChannel.getUnPopularState());
     }
 
     @Override
@@ -30,7 +33,7 @@ public class HighlyPopular implements StateI {
     }
 
     @Override
-    public void adRequest(int len){
+    public void adRequest(String video, int len){
         // TODO if len satisfies the criteria, accept, else reject
         // set state using:
         // currentChannel.setState(currentChannel.getMidPopularState());
