@@ -1,4 +1,13 @@
 package channelpopularity.driver;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -6,6 +15,15 @@ import java.io.FileInputStream;
 import channelpopularity.util.FileProcessor;
 import channelpopularity.context.ContextI;
 import channelpopularity.context.ChannelContext;
+
+
+// import channelpopularity.context.ContextI;
+// import channelpopularity.state.UnPopular;
+// import channelpopularity.state.MidPopular;
+// import channelpopularity.state.HighlyPopular;
+// import channelpopularity.state.UltraPopular;
+import channelpopularity.state.StateName;
+import channelpopularity.state.factory.SimpleStateFactoryI;
 
 /**
  * @author John Doe
@@ -24,17 +42,18 @@ public class Driver {
     * @return void
     */
 	private static void executeProcess(String inputFile, String outputFile){
-
+        
         try {
-        	FileProcessor fileProcessor	= new FileProcessor(inputFile);
-        	ContextI channel = new ChannelContext();
-
-        	String line = fileProcessor.poll();
-
-          	while(line != null){
+            FileProcessor fileProcessor = new FileProcessor(inputFile); 
+            StateName states[] = StateName.values();
+            List<StateName> stateNames = Arrays.asList(states);
+            SimpleStateFactoryI stateFactoryIn = null;
+            ContextI channel = new ChannelContext(stateFactoryIn, stateNames);
+            String line = fileProcessor.poll();
+            while(line != null){
                 channel.parseInput(line);
-        		line = fileProcessor.poll();
-        	}
+                line = fileProcessor.poll();
+            }
         }
         catch(Exception e){
           e.printStackTrace();
