@@ -6,58 +6,42 @@ import channelpopularity.state.StateName;
 
 public abstract class AbstractState implements StateI {
 
-    private StateName stateName;
+    public String video;
+    public int[] stats;
     private int adLimit;
     private ContextI currentChannel;
+    private static StateName stateName;
 
-    public void setName(StateName name)    {   this.stateName = name;   }
-    public StateName getName()             { return this.stateName;     }
-
-    public void setLimit(int adLimit)   {   this.adLimit = adLimit;  }
-    public int getLimit()               { return this.adLimit;       }
-
-    public void setContext(ContextI channel)   {   this.currentChannel = channel;  }
-    public ContextI getContext()               { return this.currentChannel;       }
-
-
-    public StateI decideState(){
-
-        StateI nexttState;
-        int popularityScore = this.currentChannel.updateScore();
-
-        System.out.println("############"+popularityScore+"############");
-        if (0 <= popularityScore && popularityScore <= 1000){
-            nexttState = currentChannel.getUnPopularState();
-        }
-        if (1000 < popularityScore && popularityScore <= 10000){
-            nexttState = currentChannel.getMidPopularState();
-        }
-        if (10000 < popularityScore && popularityScore <= 100000){
-            nexttState = currentChannel.getHighlyPopularState();
-        }
-        if (100000 < popularityScore && popularityScore <= Integer.MAX_VALUE){
-            nexttState = currentChannel.getUltraPopularState();
-        }
-
-
-        return nexttState;
-
+    public void setDetails(ContextI channel, StateName name, int adLimit){
+        this.currentChannel = channel;  
+        this.stateName = name;
+        this.adLimit = adLimit;
     }
+
+
+    @Override
+    public StateName getName()      { return this.stateName;        }
+    @Override
+    public int getLimit()           { return this.adLimit;          }
+    @Override
+    public ContextI getContext()    { return this.currentChannel;   }
+
 
     @Override
     public void addVideo(String[] details){
         stats = new int[]{0, 0, 0, 10};
         this.currentChannel.editAccount("put", details[0], stats);        
-        this.currentChannel.setState(decideState());
+        decideState();
     }
+
 
     @Override
     public void removeVideo(String[] details){
         this.currentChannel.editAccount("remove", details[0], stats);
-
-        this.currentChannel.setState(decideState());
+        decideState();
         return;
     }
+
 
     @Override
     public void addMetrics(String[] details){
@@ -69,7 +53,7 @@ public abstract class AbstractState implements StateI {
         previous[3] = this.adLimit;
         this.currentChannel.editAccount("put", details[0], previous);
 
-        this.currentChannel.setState(decideState());
+        decideState();
         return;
     }
 
@@ -82,10 +66,28 @@ public abstract class AbstractState implements StateI {
             System.out.println("\nAccepted");
         }
 
-        this.currentChannel.setState(decideState());
+        decideState();
     return;
     }
 
+
+    public void decideState(){
+        // UNPOPULAR, MILDLY_POPULAR, HIGHLY_POPULAR, ULTRA_POPULAR;
+        StateName nexttState = null;
+        int popularityScore = this.currentChannel.updateScore();
+        if (0 <= popularityScore && popularityScore <= 1000){
+            this.currentChannel.setState(StateName.UNPOPULAR);
+        }
+        if (1000 < popularityScore && popularityScore <= 10000){
+            this.currentChannel.setState(StateName.MILDLY_POPULAR);
+        }
+        if (10000 < popularityScore && popularityScore <= 100000){
+            this.currentChannel.setState(StateName.HIGHLY_POPULAR);            // nexttState = this.currentChannel.getHighlyPopularState();
+        }
+        if (100000 < popularityScore && popularityScore <= Integer.MAX_VALUE){
+            this.currentChannel.setState(StateName.HIGHLY_POPULAR);            // nexttState = this.currentChannel.getUltraPopularState();
+        }
+    }
 }
 
 

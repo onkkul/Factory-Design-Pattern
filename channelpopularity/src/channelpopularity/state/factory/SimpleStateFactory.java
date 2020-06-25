@@ -31,7 +31,6 @@ public class SimpleStateFactory implements SimpleStateFactoryI {
 
     @Override
     public StateI createStateObjects(StateName stateName, int adLimit){
-        System.out.println("in createStateObjet(): "+adLimit);
         StateI temp = new GetStateObject(this.channel, stateName, adLimit);
         return temp;
     }

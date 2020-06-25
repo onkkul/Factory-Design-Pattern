@@ -22,6 +22,7 @@ import channelpopularity.context.ChannelContext;
 // import channelpopularity.state.MidPopular;
 // import channelpopularity.state.HighlyPopular;
 // import channelpopularity.state.UltraPopular;
+
 import channelpopularity.state.StateName;
 import channelpopularity.state.factory.SimpleStateFactoryI;
 
@@ -42,13 +43,16 @@ public class Driver {
     * @return void
     */
 	private static void executeProcess(String inputFile, String outputFile){
-        
         try {
-            FileProcessor fileProcessor = new FileProcessor(inputFile); 
+
             StateName states[] = StateName.values();
             List<StateName> stateNames = Arrays.asList(states);
+
+            FileProcessor fileProcessor = new FileProcessor(inputFile); 
+
             SimpleStateFactoryI stateFactoryIn = null;
             ContextI channel = new ChannelContext(stateFactoryIn, stateNames);
+            
             String line = fileProcessor.poll();
             while(line != null){
                 channel.parseInput(line);
