@@ -59,9 +59,6 @@ public class Results implements FileDisplayInterface, StdoutDisplayInterface {
         System.out.println(appendLine);
         return;
     }
-
-
-	
 }
 
 

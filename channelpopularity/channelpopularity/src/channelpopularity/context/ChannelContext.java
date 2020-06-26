@@ -43,7 +43,11 @@ public class ChannelContext implements ContextI {
         this.result = new Results(outputFile);
     }
 
-
+    /**
+    * Gets value from hash map.
+    * @exception IllegalArgumentException for details that are not in the hash map.
+    *
+    * @return integer array of previous values*/
     @Override
     public int[] editAccount(String action, String key, int[] value)
         throws IllegalArgumentException{
@@ -67,7 +71,6 @@ public class ChannelContext implements ContextI {
         if (action == "remove"){   
             if (account.containsKey(key) == false){
                 throw new IllegalArgumentException("Video not present");
-
             }
             else{
                 account.remove(key);
@@ -95,6 +98,7 @@ public class ChannelContext implements ContextI {
         popularityScore = totalCount[0] + 2 * (totalCount[1] - totalCount[2]);
         return popularityScore;
     }
+    
     @Override
     public void setState(StateName newStateName){curState = availableStates.get(newStateName);   }
     
