@@ -12,6 +12,13 @@ public abstract class AbstractState implements StateI {
     private ContextI currentChannel;
     private StateName stateName;
 
+    /**
+    * Sets details of current state.
+    *
+    * @exception None
+    *
+    * @return void
+    */
     public void setDetails(ContextI channel, StateName name, int adLimit){
         this.currentChannel = channel;  
         this.stateName = name;
@@ -19,14 +26,46 @@ public abstract class AbstractState implements StateI {
     }
 
 
+    /**
+    * Returns Name of current state.
+    *
+    * @exception None
+    *
+    * @return StateName of current state.
+    */
     @Override
     public StateName getName()      { return this.stateName;        }
+
+
+    /**
+    * Returns limit of current state.
+    *
+    * @exception None
+    *
+    * @return int value of ad limit of current state.
+    */
     @Override
     public int getLimit()           { return this.adLimit;          }
+
+
+    /**
+    * Returns context of current state.
+    *
+    * @exception None
+    *
+    * @return context of current state
+    */
     @Override
     public ContextI getContext()    { return this.currentChannel;   }
 
 
+    /**
+    * Adds given video to the channel.
+    * 
+    * @exception None
+    *
+    * @return void
+    */
     @Override
     public void addVideo(String[] details){
         validateInput(details);
@@ -38,6 +77,13 @@ public abstract class AbstractState implements StateI {
     }
 
 
+    /**
+    * Removes given video from channel.
+    * 
+    * @exception None
+    *
+    * @return void
+    */
     @Override
     public void removeVideo(String[] details){
         validateInput(details);
@@ -49,6 +95,13 @@ public abstract class AbstractState implements StateI {
     }
 
 
+    /**
+    * Adds given stats to the output throws exception if incorrect stats.
+    * 
+    * @exception IllegalArgumentException for incorrect stats
+    *
+    * @return void
+    */
     @Override
     public void addMetrics(String[] details)throws IllegalArgumentException{
         validateInput(details);
@@ -61,12 +114,19 @@ public abstract class AbstractState implements StateI {
         }
         previous[3] = this.adLimit;
         this.currentChannel.editAccount("addM", details[0], previous);
-
         decideState();
         this.currentChannel.storeResult("__POPULARITY_SCORE_UPDATE::"+Integer.toString(popularityScore)+"\n");
         return;
     }
 
+
+    /**
+    * Accepts or rejects an AD request.
+    * 
+    * @exception None
+    *
+    * @return void
+    */
     @Override
     public void adRequest(String[] details){
         validateInput(details);
@@ -85,6 +145,13 @@ public abstract class AbstractState implements StateI {
     }
 
 
+    /**
+    * Decides what the next state should be.
+    * 
+    * @exception None
+    *
+    * @return void
+    */
     public void decideState(){
         // UNPOPULAR, MILDLY_POPULAR, HIGHLY_POPULAR, ULTRA_POPULAR;
         StateName nexttState = null;
@@ -103,6 +170,14 @@ public abstract class AbstractState implements StateI {
         }
     }
 
+
+    /**
+    * Validates input for corrrectness.
+    * 
+    * @exception IllegalArgumentException
+    *
+    * @return void
+    */
     public void validateInput(String[] details) throws IllegalArgumentException{
         // String[] validations = {"video", "0", "1", "2", "40"}
         if (!details[0].contains("video")|| details[0].replace("video", "").isEmpty()){
@@ -116,29 +191,3 @@ public abstract class AbstractState implements StateI {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-//     // public class HasCard implements ATMState {
-//     //     ATMMachine atmMachine;
-//     //     public HasCard(ATMMachine newATMMachine){    atmMachine = newATMMachine;   }
-//     // }
-//     // public class NoCard implements ATMState {
-//     //     ATMMachine atmMachine;
-//     //     public NoCard(ATMMachine newATMMachine){    atmMachine = newATMMachine;    }
-//     // }
-//     // public class HasPin implements ATMState {
-//     //     ATMMachine atmMachine;
-//     //     public HasPin(ATMMachine newATMMachine){    atmMachine = newATMMachine;    }
-//     // }
-//     // public class NoCash implements ATMState {
-//     //     ATMMachine atmMachine;
-//     //     public NoCash(ATMMachine newATMMachine){    atmMachine = newATMMachine;    }
-//     // }
